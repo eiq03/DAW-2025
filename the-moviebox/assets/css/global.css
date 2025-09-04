@@ -13,6 +13,12 @@ body{
     color: #ededed;
 }
 
+.container {
+    display:flex;
+    margin: 0;
+    
+}
+
 /*HEADER - Cabeçalho */
 header {
     padding: 1rem 2rem;
