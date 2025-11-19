@@ -1,9 +1,28 @@
+import { useEffect, useState } from "react";
+import { useMovies } from "../../cases/movies/hooks/use-hook";
+import { MovieGenres } from "../../cases/movies/components/movie-genres";
+
 export function Highlight() {
+  const { selectedMovie } = useMovies();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setIsLoading(!selectedMovie);
+  }, [selectedMovie]);
+
+  if (!selectedMovie) return null;
+  
   return (
+    isLoading ? (
+      <div className="fles justify-center items-center">
+        <p className="text-2xl text-center text-white">Carregando...</p>
+      </div>
+    ) : (
     <section
       className="relative flex bg-cover"
       style={{
-        backgroundImage: "url('./public/img/etT14XfDEqhQZdD47ywpyihXPyW.jpg')",
+        backgroundImage: `url(${selectedMovie.highlight})`,
         backgroundPosition: "left calc((50vw - 170px) - 340px) top",
       }}
     >
@@ -18,36 +37,25 @@ export function Highlight() {
       <div className="mx-auto max-w-6xl flex gap-8 py-8 z-20">
         <img
           className="rounded-lg"
-          src=".\public\img\q5pXRYTycaeW6dEgsCrd4mYPmxM.jpg"
+          src={selectedMovie.image}
           alt="Imagem do Filme"
         />
 
         <div className="flex flex-col">
           <h2 className="text-[2.5rem] font-normal">
-            Como Treinar o seu Dragão
+            {selectedMovie.title}
           </h2>
 
-          <div className="text-sm my-2.5">
-            <span className="bg-white/20 py-1.5 px-3 rounded-full">
-              Fantasia
-            </span>
-            <span className="bg-white/20 py-1.5 px-3 rounded-full ml-2">
-              Família
-            </span>
-            <span className="bg-white/20 py-1.5 px-3 rounded-full ml-2">
-              Ação & Aventura
-            </span>
-            <span className="pl-4 text-[#ccc]">2h 5m</span>
-          </div>
+      <MovieGenres movie={selectedMovie}>
+          <span className="pl-4 text-gray-300">
+            {selectedMovie.duration.replace(':', 'h ') + 'm'}
+           </span>
+      </MovieGenres>
 
           <div className="flex flex-col gap-2">
             <h4 className="font-normal pt-12 pb-2 text-2xl">Sinopse</h4>
             <p className="text-[#a0a0a0] text-sm">
-              Em um mundo onde dragões e humanos coexistem, um jovem viking
-              chamado Soluço se torna amigo de um dragão ferido chamado
-              Banguela. Juntos, eles desafiam as tradições de suas tribos e
-              descobrem que dragões não são os monstros que todos acreditavam
-              ser.
+              {selectedMovie.sinopse}
             </p>
           </div>
 
@@ -89,5 +97,6 @@ export function Highlight() {
         </div>
       </div>
     </section>
+    )
   );
 }
